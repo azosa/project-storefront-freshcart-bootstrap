@@ -1,4 +1,3 @@
-
 <header>
   <div class="bg-light py-1">
     <div class="container">
@@ -33,30 +32,33 @@
                 type="button"
                 aria-controls="navbar-default"
                 aria-label="Toggle navigation"
+                (click)="onClickMobileMenu(true)"
               >
                 <span class="icon-bar top-bar mt-0"></span>
                 <span class="icon-bar middle-bar"></span>
                 <span class="icon-bar bottom-bar"></span>
               </button>
+          
             </div>
           </div>
-        </div><ul class="nav d-none d-lg-flex">
-    <li *ngFor="let item of categories$ | async" class="nav-item">
-      <a
-        [routerLink]="'/categories/' + item.id"
-        class="nav-link fw-semibold"
-        >{{ item.name }}</a
-      >
-    </li>
-  </ul>
+        </div>
+        <ul class="nav d-none d-lg-flex">
+          <li *ngFor="let item of categories$ | async" class="nav-item">
+            <a
+              [routerLink]="'/categories/' + item.id"
+              class="nav-link fw-semibold"
+              >{{ item.name }}</a
+            >
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 </header>
 <div class="border-bottom pb-lg-4 pb-3">
   <nav class="navbar navbar-expand-lg navbar-light navbar-default pt-0 pb-0">
-    <div class="container px-0 px-md-3">
-      <div class="offcanvas offcanvas-start p-4 p-lg-0">
+    <div class="container px-0 px-md-3" *ngIf="mobileMenu$ |async as showMenu">
+      <div class="offcanvas offcanvas-start p-4 p-lg-0" [ngClass]="{ show: showMenu }">
         <div
           class="d-flex justify-content-between align-items-center mb-2 d-block d-lg-none"
         >
@@ -65,9 +67,13 @@
               src="/assets/images/logo/freshcart-logo.svg"
               alt="eCommerce HTML Template"
           /></a>
-          <button type="button" class="btn-close" aria-label="Close"></button>
+          <button type="button" class="btn-close" aria-label="Close"  (click)="onClickMobileMenu(false)"></button>
         </div>
-        <div class="d-block"></div>
+        <div class="d-block">    <ul class="navbar-nav">
+          <li *ngFor="let item of categories$ | async" class="nav-item">
+            <a [routerLink]="'/categories/' + item.id" class="nav-link" (click)="onClickMobileMenu(false)">{{ item.name }}</a>
+          </li>
+        </ul></div>
       </div>
     </div>
   </nav>
