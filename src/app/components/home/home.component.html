@@ -1,0 +1,26 @@
+<section class="my-lg-14 my-8">
+  <div class="container">
+    <div class="row">
+        <div class="col-12">
+          <div class="mb-8">
+            <!-- heading -->
+            <h3 class="mb-0">Shop by Category</h3>
+          </div>
+        </div>
+
+      </div>
+    <div class="row row-cols-2 row-cols-lg-4 row-cols-xxl-4 g-4" *ngIf="categories$ | async as categories">
+      <div *ngFor="let item of categories" class="col">
+        <a [routerLink]="'/categories/'+item.id" class="text-decoration-none text-inherit"
+          ><!-- card -->
+          <div class="card card-product">
+            <div class="card-body text-center py-8">
+              <!-- img --><img [src]="item.imageUrl" [alt]="" class="mb-3" /><!-- text -->
+              <div class="text-truncate">{{ item.name }}</div>
+            </div>
+          </div></a
+        >
+      </div>
+    </div>
+  </div>
+</section>
