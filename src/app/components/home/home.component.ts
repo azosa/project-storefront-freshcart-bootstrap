@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, map, Observable } from 'rxjs';
 import { StoreTagModel } from 'src/app/models/store-tag.model';
-import { StoresWithTagNamesQueryModel } from 'src/app/query-models/stores-with-tag-names.query-model';
+import { StoreWithTagNamesQueryModel } from 'src/app/query-models/store-with-tag-names.query-model';
 import { CategoryModel } from '../../models/category.model';
 import { StoreModel } from '../../models/store.model';
 import { CategoriesService } from '../../services/categories.service';
@@ -19,7 +19,7 @@ export class HomeComponent {
   readonly categories$: Observable<CategoryModel[]> = this._categoriesService.getAllCategories();
 
 
-  readonly stores$: Observable<StoresWithTagNamesQueryModel[]> = combineLatest([
+  readonly stores$: Observable<StoreWithTagNamesQueryModel[]> = combineLatest([
     this._storesService.getAllStores(),
     this._storesService.getStoreTags()
 ]).pipe(map(([stores,tags])=>{
@@ -28,7 +28,7 @@ export class HomeComponent {
 
 
   
-private _mapToJobWithTagsQuery(stores:StoreModel[],tags:StoreTagModel[]):StoresWithTagNamesQueryModel[]{
+private _mapToJobWithTagsQuery(stores:StoreModel[],tags:StoreTagModel[]):StoreWithTagNamesQueryModel[]{
   const storeTagsMap=tags.reduce((a,c)=>{
     return {...a,[c.id]:c}
   },{}) as Record<string,StoreTagModel>;
