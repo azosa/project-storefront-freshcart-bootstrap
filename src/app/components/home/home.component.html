@@ -1,25 +1,90 @@
 <section class="my-lg-14 my-8">
   <div class="container">
     <div class="row">
-        <div class="col-12">
-          <div class="mb-8">
-            <!-- heading -->
-            <h3 class="mb-0">Shop by Category</h3>
-          </div>
+      <div class="col-12">
+        <div class="mb-8">
+          <!-- heading -->
+          <h3 class="mb-0">Shop by Category</h3>
         </div>
-
       </div>
-    <div class="row row-cols-2 row-cols-lg-4 row-cols-xxl-4 g-4" *ngIf="categories$ | async as categories">
+    </div>
+    <div
+      class="row row-cols-2 row-cols-lg-4 row-cols-xxl-4 g-4"
+      *ngIf="categories$ | async as categories"
+    >
       <div *ngFor="let item of categories" class="col">
-        <a [routerLink]="'/categories/'+item.id" class="text-decoration-none text-inherit"
+        <a
+          [routerLink]="'/categories/' + item.id"
+          class="text-decoration-none text-inherit"
           ><!-- card -->
           <div class="card card-product">
             <div class="card-body text-center py-8">
-              <!-- img --><img [src]="item.imageUrl" [alt]="" class="mb-3" /><!-- text -->
+              <!-- img --><img
+                [src]="item.imageUrl"
+                [alt]=""
+                class="mb-3"
+              /><!-- text -->
               <div class="text-truncate">{{ item.name }}</div>
             </div>
           </div></a
         >
+      </div>
+    </div>
+  </div>
+</section>
+<section class="my-lg-14 my-8">
+  <div class="container" *ngIf="stores$ | async as stores">
+    <div class="row">
+        <div class="col-12">
+          <div class="mb-8">
+            <!-- heading -->
+            <h3 class="mb-0">Stores</h3>
+          </div>
+        </div>
+      </div>
+    <div class="row">
+        <div class="col-12">
+          <div class="mb-4">
+            <!-- title -->
+            <h6>We have <span class="text-primary">{{stores.length}}</span> vendors now</h6>
+          </div>
+        </div>
+      </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 g-lg-4">
+      <div *ngFor="let item of stores" class="col">
+        <div class="card flex-row p-8 card-product">
+          <div>
+            <img
+              [src]="item.logoUrl"
+              [alt]="item.name"
+              class="rounded-circle icon-shape icon-xl"
+            />
+          </div>
+          <div class="ms-6">
+            <h5 class="mb-1">
+              <a [routerLink]="'/stores/'+item.id" class="text-inherit">{{ item.name }}</a>
+            </h5>
+            <div class="small text-muted">
+              <ng-container *ngFor="let subitem of item.tagNames; last as last"
+                ><span>{{ subitem }}</span
+                ><span *ngIf="!last" class="mx-1"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="4"
+                    height="4"
+                    fill="#C1C7C6"
+                    class="bi bi-circle-fill align-middle"
+                    viewBox="0 0 16 16"
+                  >
+                    <circle cx="8" cy="8" r="8" /></svg></span>
+              </ng-container>
+            </div>
+            <div>
+              <!-- badge -->
+              <div class="badge text-bg-light border">{{ item.distanceInMeters.toFixed(1)}} km</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
