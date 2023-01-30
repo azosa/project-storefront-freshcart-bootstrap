@@ -35,7 +35,8 @@ export class CategoryProductsComponent {
     this._activatedRoute.params.pipe(
       switchMap((data) => {
         return this._categoriesService.getOneCategory(data['categoryId']);
-      })
+      }),
+      shareReplay(1)
     );
 
   readonly products$: Observable<ProductWithStarsQueryModel[]> = combineLatest([
@@ -43,25 +44,24 @@ export class CategoryProductsComponent {
     this.category$,
   ]).pipe(
     map(([products, category]) => {
-      products.filter((product) => product.categoryId === category.id);
-
-      return products.map((prod) => ({
-        name: prod.name,
-        price: prod.price,
-        categoryId: prod.categoryId,
-        ratingValue: prod.ratingValue,
-        ratingStars: this.getRating(prod.ratingValue),
-        ratingCount: prod.ratingCount,
-        imageUrl: prod.imageUrl,
-        featureValue: prod.featureValue,
-        storeIds: prod.storeIds,
-        id: prod.id,
-      }));
+      return products
+        .filter((product) => product.categoryId === category.id)
+        .map((prod) => ({
+          name: prod.name,
+          price: prod.price,
+          categoryId: prod.categoryId,
+          ratingValue: prod.ratingValue,
+          ratingStars: this.getRating(prod.ratingValue),
+          ratingCount: prod.ratingCount,
+          imageUrl: prod.imageUrl,
+          featureValue: prod.featureValue,
+          storeIds: prod.storeIds,
+          id: prod.id,
+        }));
     })
   );
 
   private getRating(val: number) {
-    console.log(val);
     let result = [];
     let fP = Math.trunc(val);
     let lP = Number((val - fP).toFixed(1));
