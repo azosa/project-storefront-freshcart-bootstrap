@@ -1,4 +1,4 @@
-export interface StoresWithTagNamesQueryModel {
+export interface StoreWithTagNamesQueryModel {
   readonly name: string;
   readonly logoUrl: string;
   readonly distanceInMeters: number;
