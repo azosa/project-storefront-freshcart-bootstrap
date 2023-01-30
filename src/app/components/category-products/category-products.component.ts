@@ -83,5 +83,10 @@ export class CategoryProductsComponent {
     private _categoriesService: CategoriesService,
     private _activatedRoute: ActivatedRoute,
     private _productsService: ProductsService
+      })
+    );
+  constructor(
+    private _categoriesService: CategoriesService,
+    private _activatedRoute: ActivatedRoute
   ) {}
 }
