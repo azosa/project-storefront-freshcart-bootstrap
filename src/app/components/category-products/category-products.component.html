@@ -1,36 +1,97 @@
 <section class="mt-8 mb-lg-14 mb-8">
   <div class="container">
     <div class="row gx-10">
-        <aside class="col-lg-3 col-md-4 mb-6 mb-md-0">
-      <div class="mb-8">
-        <!-- title -->
-        <h5 class="mb-3">Categories</h5>
-        <!-- nav -->
-        <ul class="nav nav-category" id="categoryCollapseMenu">
-          <li *ngFor="let item of categories$ | async"
-            class="nav-item border-bottom w-100 collapsed"
-            data-bs-toggle="collapse"
-            data-bs-target="#categoryFlushOne"
-            aria-expanded="false"
-            aria-controls="categoryFlushOne"
-          >
-          <a [routerLink]="'/categories/'+item.id" class="nav-link">{{ item.name }}
-              <i class="feather-icon icon-chevron-right"></i
-            ></a>
-          </li>
-        </ul>
-      </div></aside>
+      <aside class="col-lg-3 col-md-4 mb-6 mb-md-0">
+        <div class="mb-8">
+          <!-- title -->
+          <h5 class="mb-3">Categories</h5>
+          <!-- nav -->
+          <ul class="nav nav-category" id="categoryCollapseMenu">
+            <li
+              *ngFor="let item of categories$ | async"
+              class="nav-item border-bottom w-100 collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#categoryFlushOne"
+              aria-expanded="false"
+              aria-controls="categoryFlushOne"
+            >
+              <a [routerLink]="'/categories/' + item.id" class="nav-link"
+                >{{ item.name }} <i class="feather-icon icon-chevron-right"></i
+              ></a>
+            </li>
+          </ul>
+        </div>
+      </aside>
       <section class="col-lg-9 col-md-12" *ngIf="category$ | async as category">
+        <div class="card mb-4 bg-light border-0">
+          <!-- card body -->
+          <div class="card-body p-9">
+            <h2 class="mb-0 fs-1">{{ category.name }}</h2>
+          </div>
+        </div>
+        <div
+          class="row g-4 row-cols-1 mt-2"
+          *ngIf="products$ | async as products"
+        >
+          <div class="mb-3 mb-lg-0">
+            <p class="mb-0">
+              <span class="text-dark">{{ products.length }} </span> Products
+              found
+            </p>
+          </div>
+          <!-- col -->
+          <div class="col" *ngFor="let item of products">
+            <!-- card -->
+            <div class="card card-product">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-md-4 col-12">
+                    <div class="text-center position-relative">
+                      <a href="shop-single.html">
+                        <!-- img --><img
+                          [src]="item.imageUrl"
+                          alt="Grocery Ecommerce Template"
+                          class="mb-3 img-fluid"
+                      /></a>
+                    </div>
+                  </div>
+                  <div class="col-md-8 col-12 flex-grow-1">
+                    <!-- heading -->
+                    <div class="text-small mb-1">
+                      <a href="#!" class="text-decoration-none text-muted"
+                        ><small>{{ category.name }}</small></a
+                      >
+                    </div>
+                    <h2 class="fs-6">
+                      <a
+                        href="shop-single.html"
+                        class="text-inherit text-decoration-none"
+                        >{{ item.name }}</a
+                      >
+                    </h2>
+                    <div *ngIf="item.ratingValue">
+                      <!-- rating --><small class="text-warning">
+                        <i *ngFor="let val of item.ratingStars" class="bi"
+                        [ngClass]="{'bi-star-fill': val === 1, 'bi-star': val === 0, 'bi-star-half': val === 0.5}"></i>
 
-<div class="card mb-4 bg-light border-0">
-    <!-- card body -->
-    <div class="card-body p-9">
-      <h2 class="mb-0 fs-1">{{category.name}}</h2>
-    </div>
-  </div>
-        
+                      </small>
+                      <span class="text-muted small"
+                        >{{ item.ratingValue }}({{ item.ratingCount }})</span
+                      >
+                    </div>
+                    <div class="mt-6">
+                      <!-- price -->
+                      <div>
+                        <span class="text-dark">${{ item.price }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   </div>
 </section>
-
