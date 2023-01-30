@@ -3,20 +3,21 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
-  combineLatest,
   Observable,
+  combineLatest,
   filter,
   map,
+  of,
   shareReplay,
   switchMap,
   tap,
-  of,
+  startWith,
 } from 'rxjs';
-import { ProductWithStarsQueryModel } from 'src/app/query-models/product-with-stars.query-model';
 import { CategoryModel } from '../../models/category.model';
-import { ProductModel } from '../../models/product.model';
+import { ProductWithStarsQueryModel } from '../../query-models/product-with-stars.query-model';
 import { CategoriesService } from '../../services/categories.service';
 import { ProductsService } from '../../services/products.service';
 
@@ -28,6 +29,10 @@ import { ProductsService } from '../../services/products.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryProductsComponent {
+  readonly sortBySelect: FormGroup = new FormGroup({
+    select: new FormControl('featured'),
+  });
+
   readonly categories$: Observable<CategoryModel[]> = this._categoriesService
     .getAllCategories()
     .pipe(shareReplay(1));
@@ -42,10 +47,32 @@ export class CategoryProductsComponent {
   readonly products$: Observable<ProductWithStarsQueryModel[]> = combineLatest([
     this._productsService.getAllProducts(),
     this.category$,
+    this.sortBySelect.valueChanges.pipe(startWith('featured')),
   ]).pipe(
-    map(([products, category]) => {
+    map(([products, category, sortBySelect]) => {
       return products
         .filter((product) => product.categoryId === category.id)
+        .sort((a, b) => {
+          if (
+            sortBySelect.select === 'featured' ||
+            sortBySelect == 'featured'
+          ) {
+            return a.featureValue > b.featureValue ? -1 : 1;
+          }
+
+          if (sortBySelect.select === 'Low to High') {
+            return a.price > b.price ? 1 : -1;
+          }
+
+          if (sortBySelect.select === 'High to Low') {
+            return a.price > b.price ? -1 : 1;
+          }
+
+          if (sortBySelect.select === 'Avg. Rating') {
+            return a.ratingValue > b.ratingValue ? -1 : 1;
+          }
+          return 0;
+        })
         .map((prod) => ({
           name: prod.name,
           price: prod.price,
@@ -83,10 +110,5 @@ export class CategoryProductsComponent {
     private _categoriesService: CategoriesService,
     private _activatedRoute: ActivatedRoute,
     private _productsService: ProductsService
-      })
-    );
-  constructor(
-    private _categoriesService: CategoriesService,
-    private _activatedRoute: ActivatedRoute
   ) {}
 }

@@ -21,23 +21,6 @@
         </div>
       </aside>
 
-        <aside class="col-lg-3 col-md-4 mb-6 mb-md-0">
-      <div class="mb-8">
-        <!-- title -->
-        <h5 class="mb-3">Categories</h5>
-        <!-- nav -->
-        <ul class="nav nav-category" id="categoryCollapseMenu">
-          <li *ngFor="let item of categories$ | async"
-            class="nav-item border-bottom w-100 collapsed"
-            aria-expanded="false"
-            aria-controls="categoryFlushOne"
-          >
-          <a [routerLink]="'/categories/'+item.id" class="nav-link">{{ item.name }}
-              <i class="feather-icon icon-chevron-right"></i
-            ></a>
-          </li>
-        </ul>
-      </div></aside>
       <section class="col-lg-9 col-md-12" *ngIf="category$ | async as category">
         <div class="card mb-4 bg-light border-0">
           <!-- card body -->
@@ -49,11 +32,33 @@
           class="row g-4 row-cols-1 mt-2"
           *ngIf="products$ | async as products"
         >
-          <div class="mb-3 mb-lg-0">
-            <p class="mb-0">
-              <span class="text-dark">{{ products.length }} </span> Products
-              found
-            </p>
+          <div
+            class="d-md-flex justify-content-between mb-3 align-items-center"
+          >
+            <div class="mb-3 mb-lg-0">
+              <p class="mb-0">
+                <span class="text-dark">{{ products.length }} </span> Products
+                found
+              </p>
+            </div>
+            <div class="d-flex justify-content-md-between align-items-center">
+              <form [formGroup]="sortBySelect" >
+                <mat-select class="form-select" formControlName="select">
+                  <mat-option default value="featured" >
+                    Sort by: Featured
+                  </mat-option>
+                  <mat-option value="Low to High">
+                    Price: Low to High
+                  </mat-option>
+                  <mat-option value="High to Low">
+                    Price: High to Low
+                  </mat-option>
+                  <mat-option  value="Avg. Rating">
+                    Avg. Rating
+                  </mat-option>
+                </mat-select>
+              </form>
+            </div>
           </div>
           <!-- col -->
           <div class="col" *ngFor="let item of products">
@@ -87,9 +92,15 @@
                     </h2>
                     <div *ngIf="item.ratingValue">
                       <!-- rating --><small class="text-warning">
-                        <i *ngFor="let val of item.ratingStars" class="bi"
-                        [ngClass]="{'bi-star-fill': val === 1, 'bi-star': val === 0, 'bi-star-half': val === 0.5}"></i>
-
+                        <i
+                          *ngFor="let val of item.ratingStars"
+                          class="bi"
+                          [ngClass]="{
+                            'bi-star-fill': val === 1,
+                            'bi-star': val === 0,
+                            'bi-star-half': val === 0.5
+                          }"
+                        ></i>
                       </small>
                       <span class="text-muted small"
                         >{{ item.ratingValue }}({{ item.ratingCount }})</span
