@@ -46,7 +46,7 @@ export class StoreProductsComponent {
                 .includes(search.searchMarket.toLowerCase()) &&
               prod.storeIds.includes(store.id)
           )
-        : products
+        : products.filter((prod)=>prod.storeIds.includes(store.id))
     )
   );
 
