@@ -19,6 +19,22 @@
             </li>
           </ul>
         </div>
+<div>
+  <form [formGroup]="filterByStore">
+    <div   *ngFor="let store of stores$ |async" class="form-check mb-2">
+      <input
+        [id]="store.id"
+        class="form-check-input"
+        type="checkbox"
+        [value]="store.id"
+      [formControlName]="store.id" 
+     /><label [for]="store" class="form-check-label">{{
+        store.name
+      }}</label>
+    </div>
+  </form>
+</div>
+
         <div [formGroup]="filterProductsByPrice">
           <label class="form-label fw-bold fs-5">Price</label>
           <div class="input-group input-group-sm mb-3">

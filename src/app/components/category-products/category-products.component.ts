@@ -9,6 +9,7 @@ import {
   BehaviorSubject,
   Observable,
   combineLatest,
+  debounceTime,
   filter,
   map,
   of,
@@ -16,6 +17,9 @@ import {
   startWith,
   switchMap,
   tap,
+  take,
+  Subject,
+  first,
   debounceTime,
   BehaviorSubject,
   take,
@@ -23,8 +27,10 @@ import {
 import { QueryParamsModel } from '../../models/query-params.model';
 import { CategoryModel } from '../../models/category.model';
 import { ProductWithStarsQueryModel } from '../../query-models/product-with-stars.query-model';
+import { StoreModel } from '../../models/store.model';
 import { CategoriesService } from '../../services/categories.service';
 import { ProductsService } from '../../services/products.service';
+import { StoresService } from '../../services/stores.service';
 
 @Component({
   selector: 'app-category-products',
@@ -52,15 +58,37 @@ export class CategoryProductsComponent {
   readonly ratingByStar: FormGroup = new FormGroup({
     rating: new FormControl(),
   });
+  readonly filterByStore: FormGroup = new FormGroup({});
 
-  
   readonly filterByPriceValueChanges$: Observable<any> =
     this.filterProductsByPrice.valueChanges.pipe(
       startWith({ priceFrom: 0, priceTo: 9999 }),
       shareReplay(1)
     );
   readonly filterByStarRatingValueChanges$: Observable<any> =
-    this.ratingByStar.valueChanges.pipe(startWith(0),shareReplay(1));
+    this.ratingByStar.valueChanges.pipe(startWith(0), shareReplay(1));
+
+  readonly stores$: Observable<StoreModel[]> = this._storesService
+    .getAllStores()
+    .pipe(
+      tap((data) => this.createFormControl(data)),
+      shareReplay(1)
+    );
+  createFormControl(stores: StoreModel[]) {
+    stores.forEach((store) =>
+      this.filterByStore.addControl(store.id, new FormControl(false))
+    );
+  }
+
+  readonly filterByStoreValueChanges$: Observable<any> =
+    this.filterByStore.valueChanges.pipe(
+      map((store) => {
+        return Object.keys(store).filter((id) =>
+          store[id] == true 
+        );
+      }),
+      shareReplay(1)
+    );
 
   private _activePageSubject: BehaviorSubject<number> =
     new BehaviorSubject<number>(1);
@@ -89,60 +117,76 @@ export class CategoryProductsComponent {
     this.sortBySelect.valueChanges.pipe(startWith('featured')),
     this.pageQueryParams$,
     this.filterByPriceValueChanges$,
-    this.filterByStarRatingValueChanges$
+    this.filterByStarRatingValueChanges$,
+    this.filterByStoreValueChanges$,
   ]).pipe(
-    map(([products, category, sortBySelect, params, filters, ratingStar]) => {
-      return products
-        .filter((product) =>
-          ratingStar != 0
-            ? Math.trunc(product.ratingValue) == ratingStar.rating
-            : product.ratingValue > 0
-        )
-        .filter((product) =>
-          filters.priceFrom
-            ? product.price >= filters.priceFrom
-            : product.price > 0
-        )
-        .filter((product) =>
-          filters.priceTo
-            ? product.price <= filters.priceTo
-            : product.price < 9999
-        )
-        .filter((product) => product.categoryId === category.id)
-        .sort((a, b) => {
-          if (
-            sortBySelect.select === 'featured' ||
-            sortBySelect == 'featured'
-          ) {
-            return a.featureValue > b.featureValue ? -1 : 1;
-          }
+    map(
+      ([
+        products,
+        category,
+        sortBySelect,
+        params,
+        filters,
+        ratingStar,
+        store,
+      ]) => {
+        return products
+          .filter((product) =>
+            store?.length > 0
+              ? product.storeIds.some((r) => store.includes(r))
+              : product
+          )
+          .filter((product) =>
+            ratingStar != 0
+              ? Math.trunc(product.ratingValue) == ratingStar.rating
+              : product.ratingValue > 0
+          )
+          .filter((product) =>
+            filters.priceFrom
+              ? product.price >= filters.priceFrom
+              : product.price > 0
+          )
+          .filter((product) =>
+            filters.priceTo
+              ? product.price <= filters.priceTo
+              : product.price < 9999
+          )
+          .filter((product) => product.categoryId === category.id)
+          .sort((a, b) => {
+            if (
+              sortBySelect.select === 'featured' ||
+              sortBySelect == 'featured'
+            ) {
+              return a.featureValue > b.featureValue ? -1 : 1;
+            }
 
-          if (sortBySelect.select === 'Low to High') {
-            return a.price > b.price ? 1 : -1;
-          }
+            if (sortBySelect.select === 'Low to High') {
+              return a.price > b.price ? 1 : -1;
+            }
 
-          if (sortBySelect.select === 'High to Low') {
-            return a.price > b.price ? -1 : 1;
-          }
+            if (sortBySelect.select === 'High to Low') {
+              return a.price > b.price ? -1 : 1;
+            }
 
-          if (sortBySelect.select === 'Avg. Rating') {
-            return a.ratingValue > b.ratingValue ? -1 : 1;
-          }
-          return 0;
-        })
-        .map((prod) => ({
-          name: prod.name,
-          price: prod.price,
-          categoryId: prod.categoryId,
-          ratingValue: prod.ratingValue,
-          ratingStars: this.getRating(prod.ratingValue),
-          ratingCount: prod.ratingCount,
-          imageUrl: prod.imageUrl,
-          featureValue: prod.featureValue,
-          storeIds: prod.storeIds,
-          id: prod.id,
-        }));
-    }),
+            if (sortBySelect.select === 'Avg. Rating') {
+              return a.ratingValue > b.ratingValue ? -1 : 1;
+            }
+            return 0;
+          })
+          .map((prod) => ({
+            name: prod.name,
+            price: prod.price,
+            categoryId: prod.categoryId,
+            ratingValue: prod.ratingValue,
+            ratingStars: this.getRating(prod.ratingValue),
+            ratingCount: prod.ratingCount,
+            imageUrl: prod.imageUrl,
+            featureValue: prod.featureValue,
+            storeIds: prod.storeIds,
+            id: prod.id,
+          }));
+      }
+    ),
     shareReplay(1)
   );
 
@@ -225,6 +269,7 @@ export class CategoryProductsComponent {
     private _categoriesService: CategoriesService,
     private _activatedRoute: ActivatedRoute,
     private _productsService: ProductsService,
-    private _router: Router
+    private _router: Router,
+    private _storesService: StoresService
   ) {}
 }
