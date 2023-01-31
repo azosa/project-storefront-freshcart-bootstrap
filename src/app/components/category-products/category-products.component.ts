@@ -81,7 +81,7 @@ export class CategoryProductsComponent {
     this.filterByStore.valueChanges.pipe(
       map((store) => {
         return Object.keys(store).filter((id) =>
-          store[id] == true ? store[id] : ''
+          store[id] == true 
         );
       }),
       shareReplay(1)
