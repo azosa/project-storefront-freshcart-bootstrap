@@ -17,6 +17,8 @@ import {
   switchMap,
   tap,
   debounceTime,
+  BehaviorSubject,
+  take,
 } from 'rxjs';
 import { QueryParamsModel } from '../../models/query-params.model';
 import { CategoryModel } from '../../models/category.model';
@@ -190,6 +192,7 @@ export class CategoryProductsComponent {
     this._activePageSizeSubject.next(value);
     this.pageQueryParams$
       .pipe(
+        take(1),
         tap((params) => {
           this._router.navigate([], {
             queryParams: {
@@ -206,6 +209,7 @@ export class CategoryProductsComponent {
     this._activePageSubject.next(value);
     this.pageQueryParams$
       .pipe(
+        take(1),
         tap((params) => {
           this._router.navigate([], {
             queryParams: {
