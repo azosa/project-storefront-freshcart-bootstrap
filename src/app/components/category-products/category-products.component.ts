@@ -80,7 +80,7 @@ export class CategoryProductsComponent {
       }),
       shareReplay(1)
     );
-  selected = -1;
+
   readonly products$: Observable<ProductWithStarsQueryModel[]> = combineLatest([
     this._productsService.getAllProducts(),
     this.category$,
