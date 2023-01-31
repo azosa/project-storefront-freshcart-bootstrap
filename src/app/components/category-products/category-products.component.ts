@@ -51,6 +51,9 @@ export class CategoryProductsComponent {
   readonly sortBySelect: FormGroup = new FormGroup({
     select: new FormControl('featured'),
   });
+  readonly search: FormGroup = new FormGroup({
+    searchStore: new FormControl(),
+  });
   readonly filterProductsByPrice: FormGroup = new FormGroup({
     priceFrom: new FormControl(),
     priceTo: new FormControl(),
@@ -70,15 +73,27 @@ export class CategoryProductsComponent {
 
   readonly stores$: Observable<StoreModel[]> = this._storesService
     .getAllStores()
-    .pipe(
-      tap((data) => this.createFormControl(data)),
-      shareReplay(1)
-    );
+    .pipe(shareReplay(1));
   createFormControl(stores: StoreModel[]) {
     stores.forEach((store) =>
       this.filterByStore.addControl(store.id, new FormControl(false))
     );
   }
+  readonly storesFiltered$: Observable<StoreModel[]> = combineLatest([
+    this.stores$,
+    this.search.valueChanges.pipe(startWith('')),
+  ]).pipe(
+    map(([stores, search]) =>
+      search.searchStore
+        ? stores.filter((store) =>
+            store.name.toLowerCase().includes(search.searchStore.toLowerCase())
+          )
+        : stores
+    ),
+    tap((stores) => {
+      this.createFormControl(stores);
+    })
+  );
 
   readonly filterByStoreValueChanges$: Observable<any> =
     this.filterByStore.valueChanges.pipe(
