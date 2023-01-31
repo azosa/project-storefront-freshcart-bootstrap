@@ -69,47 +69,80 @@
         <div>
           <form [formGroup]="ratingByStar" class="mt-8">
             <label class="form-label fw-bold fs-5">Rating</label>
-
-            <mat-radio-group
-              class="input-group input-group-sm mb-3 d-flex flex-column"
-              formControlName="rating"
-            >
-              <mat-radio-button value="5">
-                <i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star-fill text-warning"></i
-              ></mat-radio-button>
-              <mat-radio-button value="4">
-                <i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star text-warning"></i
-              ></mat-radio-button>
-              <mat-radio-button value="3">
-                <i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star text-warning"></i
-                ><i class="bi bi-star text-warning"></i
-              ></mat-radio-button>
-              <mat-radio-button value="2">
-                <i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star text-warning"></i
-                ><i class="bi bi-star text-warning"></i
-                ><i class="bi bi-star text-warning"></i
-              ></mat-radio-button>
-              <mat-radio-button value="1">
-                <i class="bi bi-star-fill text-warning"></i
-                ><i class="bi bi-star text-warning"></i
-                ><i class="bi bi-star text-warning"></i
-                ><i class="bi bi-star text-warning"></i
-                ><i class="bi bi-star text-warning"></i
-              ></mat-radio-button>
-            </mat-radio-group>
+            <div class="input-group input-group-sm mb-3 d-flex flex-column">
+              <div class="form-check mb-2">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  formControlName="rating"
+                  value="5"
+                  id="ratingFive"
+                />
+                <label class="form-check-label" for="ratingFive">
+                  <i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star-fill text-warning"></i
+                ></label></div>
+                <div class="form-check mb-2"> <input
+                  type="radio"
+                  class="form-check-input"
+                  formControlName="rating"
+                  value="4"
+                  id="ratingFour"
+                />
+                <label class="form-check-label" for="ratingFour">
+                  <i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star text-warning"></i
+                ></label>
+               </div> <div class="form-check mb-2">  <input
+                  type="radio"
+                  class="form-check-input"
+                  formControlName="rating"
+                  value="3"
+                  id="ratingThree"
+                />
+                <label class="form-check-label" for="ratingThree">
+                  <i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star text-warning"></i
+                  ><i class="bi bi-star text-warning"></i
+                ></label>
+              </div> <div class="form-check mb-2">    <input
+                  type="radio"
+                  class="form-check-input"
+                  formControlName="rating"
+                  value="2"
+                  id="ratingTwo"
+                />
+                <label class="form-check-label" for="ratingTwo">
+                  <i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star text-warning"></i
+                  ><i class="bi bi-star text-warning"></i
+                  ><i class="bi bi-star text-warning"></i
+                ></label>
+              </div> <div class="form-check mb-2">     <input
+                  type="radio"
+                  class="form-check-input"
+                  formControlName="rating"
+                  value="1"
+                  id="ratingOne"
+                />
+                <label class="form-check-label" for="ratingOne">
+                  <i class="bi bi-star-fill text-warning"></i
+                  ><i class="bi bi-star text-warning"></i
+                  ><i class="bi bi-star text-warning"></i
+                  ><i class="bi bi-star text-warning"></i
+                  ><i class="bi bi-star text-warning"></i
+                ></label>
+              </div>
+            </div>
           </form>
         </div>
       </aside>
@@ -136,18 +169,12 @@
             </div>
             <div class="d-flex justify-content-md-between align-items-center">
               <form [formGroup]="sortBySelect">
-                <mat-select class="form-select" formControlName="select">
-                  <mat-option default value="featured">
-                    Sort by: Featured
-                  </mat-option>
-                  <mat-option value="Low to High">
-                    Price: Low to High
-                  </mat-option>
-                  <mat-option value="High to Low">
-                    Price: High to Low
-                  </mat-option>
-                  <mat-option value="Avg. Rating"> Avg. Rating </mat-option>
-                </mat-select>
+                <select class="form-select" formControlName="select">
+                  <option default value="featured">Sort by: Featured</option>
+                  <option value="Low to High">Price: Low to High</option>
+                  <option value="High to Low">Price: High to Low</option>
+                  <option value="Avg. Rating">Avg. Rating</option>
+                </select>
               </form>
             </div>
           </div>
