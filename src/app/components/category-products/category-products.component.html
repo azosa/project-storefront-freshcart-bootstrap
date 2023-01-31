@@ -19,6 +19,25 @@
             </li>
           </ul>
         </div>
+        <div [formGroup]="filterProducts">
+          <label class="form-label fw-bold fs-5">Price</label>
+          <div class="input-group input-group-sm mb-3">
+            <input
+              formControlName="priceFrom"
+              type="number"
+              placeholder="Price From"
+              class="form-control"
+            />
+          </div>
+          <div class="input-group input-group-sm mb-3">
+            <input
+              formControlName="priceTo"
+              type="number"
+              placeholder="Price To"
+              class="form-control"
+            />
+          </div>
+        </div>
       </aside>
 
       <section class="col-lg-9 col-md-12" *ngIf="category$ | async as category">
@@ -118,7 +137,7 @@
         </div>
         <div *ngIf="pageQueryParams$ | async as pgParams">
           <div class="pt-10 d-flex flex-row justify-content-between">
-            <nav aria-label="... " class="d-flex flex-column">
+            <nav  class="d-flex flex-column">
               <h4>Limit</h4>
               <ul class="pagination pagination-sm">
                 <li
@@ -133,7 +152,7 @@
               </ul>
             </nav>
 
-            <nav aria-label="... " class="d-flex flex-column">
+            <nav class="d-flex flex-column">
               <h4>Page</h4>
               <ul
                 class="pagination pagination-sm list-group list-group-horizontal"

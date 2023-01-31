@@ -6,6 +6,7 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  BehaviorSubject,
   Observable,
   combineLatest,
   filter,
@@ -15,6 +16,7 @@ import {
   startWith,
   switchMap,
   tap,
+  debounceTime,
   BehaviorSubject,
   take,
 } from 'rxjs';
@@ -43,7 +45,15 @@ export class CategoryProductsComponent {
   readonly sortBySelect: FormGroup = new FormGroup({
     select: new FormControl('featured'),
   });
-
+  readonly filterProducts: FormGroup = new FormGroup({
+    priceFrom: new FormControl(),
+    priceTo: new FormControl(),
+  });
+  readonly filterByPriceValueChanges$: Observable<any> =
+    this.filterProducts.valueChanges.pipe(
+      startWith({ priceFrom: 0, priceTo: 9999 }),
+      shareReplay(1)
+    );
   private _activePageSubject: BehaviorSubject<number> =
     new BehaviorSubject<number>(1);
   public activePage$: Observable<number> =
@@ -70,9 +80,20 @@ export class CategoryProductsComponent {
     this.category$,
     this.sortBySelect.valueChanges.pipe(startWith('featured')),
     this.pageQueryParams$,
+    this.filterByPriceValueChanges$,
   ]).pipe(
-    map(([products, category, sortBySelect, params]) => {
+    map(([products, category, sortBySelect, params, filters]) => {
       return products
+        .filter((product) =>
+          filters.priceFrom
+            ? product.price >= filters.priceFrom
+            : product.price > 0
+        )
+        .filter((product) =>
+          filters.priceTo
+            ? product.price <= filters.priceTo
+            : product.price < 9999
+        )
         .filter((product) => product.categoryId === category.id)
         .sort((a, b) => {
           if (
@@ -110,6 +131,7 @@ export class CategoryProductsComponent {
     }),
     shareReplay(1)
   );
+
   readonly paginatedProductsList$: Observable<ProductWithStarsQueryModel[]> =
     combineLatest([this.products$, this.pageQueryParams$]).pipe(
       map(([products, params]) =>
@@ -119,6 +141,7 @@ export class CategoryProductsComponent {
         )
       )
     );
+
   private getRating(val: number) {
     let result = [];
     let fP = Math.trunc(val);
