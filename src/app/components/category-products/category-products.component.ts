@@ -9,19 +9,11 @@ import {
   BehaviorSubject,
   Observable,
   combineLatest,
-  debounceTime,
-  filter,
   map,
-  of,
   shareReplay,
   startWith,
   switchMap,
   tap,
-  take,
-  Subject,
-  first,
-  debounceTime,
-  BehaviorSubject,
   take,
 } from 'rxjs';
 import { QueryParamsModel } from '../../models/query-params.model';
@@ -98,9 +90,7 @@ export class CategoryProductsComponent {
   readonly filterByStoreValueChanges$: Observable<any> =
     this.filterByStore.valueChanges.pipe(
       map((store) => {
-        return Object.keys(store).filter((id) =>
-          store[id] == true 
-        );
+        return Object.keys(store).filter((id) => store[id] == true);
       }),
       shareReplay(1)
     );
@@ -130,7 +120,6 @@ export class CategoryProductsComponent {
     this._productsService.getAllProducts(),
     this.category$,
     this.sortBySelect.valueChanges.pipe(startWith('featured')),
-    this.pageQueryParams$,
     this.filterByPriceValueChanges$,
     this.filterByStarRatingValueChanges$,
     this.filterByStoreValueChanges$,
@@ -140,7 +129,6 @@ export class CategoryProductsComponent {
         products,
         category,
         sortBySelect,
-        params,
         filters,
         ratingStar,
         store,
@@ -148,7 +136,7 @@ export class CategoryProductsComponent {
         return products
           .filter((product) =>
             store?.length > 0
-              ? product.storeIds.some((r) => store.includes(r))
+              ? product.storeIds.some((sId) => store.includes(sId))
               : product
           )
           .filter((product) =>
