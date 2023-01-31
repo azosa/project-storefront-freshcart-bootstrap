@@ -42,9 +42,9 @@
               </p>
             </div>
             <div class="d-flex justify-content-md-between align-items-center">
-              <form [formGroup]="sortBySelect" >
+              <form [formGroup]="sortBySelect">
                 <mat-select class="form-select" formControlName="select">
-                  <mat-option default value="featured" >
+                  <mat-option default value="featured">
                     Sort by: Featured
                   </mat-option>
                   <mat-option value="Low to High">
@@ -53,15 +53,13 @@
                   <mat-option value="High to Low">
                     Price: High to Low
                   </mat-option>
-                  <mat-option  value="Avg. Rating">
-                    Avg. Rating
-                  </mat-option>
+                  <mat-option value="Avg. Rating"> Avg. Rating </mat-option>
                 </mat-select>
               </form>
             </div>
           </div>
           <!-- col -->
-          <div class="col" *ngFor="let item of products">
+          <div class="col" *ngFor="let item of paginatedProductsList$ | async">
             <!-- card -->
             <div class="card card-product">
               <div class="card-body">
@@ -116,6 +114,41 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div *ngIf="pageQueryParams$ | async as pgParams">
+          <div class="pt-10 d-flex flex-row justify-content-between">
+            <nav aria-label="... " class="d-flex flex-column">
+              <h4>Limit</h4>
+              <ul class="pagination pagination-sm">
+                <li
+                  *ngFor="let item of pgParams.pageSizeOptions"
+                  (click)="onPageSizeChange(item)"
+                  [ngClass]="{
+                    'page-item active': (activePageSize$ | async) === item
+                  }"
+                >
+                  <a class="page-link"> {{ item }}</a>
+                </li>
+              </ul>
+            </nav>
+
+            <nav aria-label="... " class="d-flex flex-column">
+              <h4>Page</h4>
+              <ul
+                class="pagination pagination-sm list-group list-group-horizontal"
+              >
+                <li
+                  *ngFor="let item of pages$ | async"
+                  [ngClass]="{
+                    'page-item active': (activePage$ | async) === item
+                  }"
+                  (click)="onPageChange(item)"
+                >
+                  <a class="page-link"> {{ item }}</a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </section>
