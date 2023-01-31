@@ -20,6 +20,9 @@ import {
   take,
   Subject,
   first,
+  debounceTime,
+  BehaviorSubject,
+  take,
 } from 'rxjs';
 import { QueryParamsModel } from '../../models/query-params.model';
 import { CategoryModel } from '../../models/category.model';
@@ -107,7 +110,7 @@ export class CategoryProductsComponent {
       }),
       shareReplay(1)
     );
-  selected = -1;
+
   readonly products$: Observable<ProductWithStarsQueryModel[]> = combineLatest([
     this._productsService.getAllProducts(),
     this.category$,
@@ -233,6 +236,7 @@ export class CategoryProductsComponent {
     this._activePageSizeSubject.next(value);
     this.pageQueryParams$
       .pipe(
+        take(1),
         tap((params) => {
           this._router.navigate([], {
             queryParams: {
@@ -249,6 +253,7 @@ export class CategoryProductsComponent {
     this._activePageSubject.next(value);
     this.pageQueryParams$
       .pipe(
+        take(1),
         tap((params) => {
           this._router.navigate([], {
             queryParams: {
