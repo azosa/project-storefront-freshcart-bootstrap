@@ -19,7 +19,7 @@
             </li>
           </ul>
         </div>
-        <div [formGroup]="filterProducts">
+        <div [formGroup]="filterProductsByPrice">
           <label class="form-label fw-bold fs-5">Price</label>
           <div class="input-group input-group-sm mb-3">
             <input
@@ -37,6 +37,52 @@
               class="form-control"
             />
           </div>
+        </div>
+        <div>
+          <form [formGroup]="ratingByStar" class="mt-8">
+            <label class="form-label fw-bold fs-5">Rating</label>
+
+            <mat-radio-group
+              class="input-group input-group-sm mb-3 d-flex flex-column"
+              formControlName="rating"
+            >
+              <mat-radio-button value="5">
+                <i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star-fill text-warning"></i
+              ></mat-radio-button>
+              <mat-radio-button value="4">
+                <i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star text-warning"></i
+              ></mat-radio-button>
+              <mat-radio-button value="3">
+                <i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star text-warning"></i
+                ><i class="bi bi-star text-warning"></i
+              ></mat-radio-button>
+              <mat-radio-button value="2">
+                <i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star text-warning"></i
+                ><i class="bi bi-star text-warning"></i
+                ><i class="bi bi-star text-warning"></i
+              ></mat-radio-button>
+              <mat-radio-button value="1">
+                <i class="bi bi-star-fill text-warning"></i
+                ><i class="bi bi-star text-warning"></i
+                ><i class="bi bi-star text-warning"></i
+                ><i class="bi bi-star text-warning"></i
+                ><i class="bi bi-star text-warning"></i
+              ></mat-radio-button>
+            </mat-radio-group>
+          </form>
         </div>
       </aside>
 
@@ -137,7 +183,7 @@
         </div>
         <div *ngIf="pageQueryParams$ | async as pgParams">
           <div class="pt-10 d-flex flex-row justify-content-between">
-            <nav  class="d-flex flex-column">
+            <nav class="d-flex flex-column">
               <h4>Limit</h4>
               <ul class="pagination pagination-sm">
                 <li
