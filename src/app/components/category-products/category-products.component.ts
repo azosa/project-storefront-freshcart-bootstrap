@@ -45,15 +45,23 @@ export class CategoryProductsComponent {
   readonly sortBySelect: FormGroup = new FormGroup({
     select: new FormControl('featured'),
   });
-  readonly filterProducts: FormGroup = new FormGroup({
+  readonly filterProductsByPrice: FormGroup = new FormGroup({
     priceFrom: new FormControl(),
     priceTo: new FormControl(),
   });
+  readonly ratingByStar: FormGroup = new FormGroup({
+    rating: new FormControl(),
+  });
+
+  
   readonly filterByPriceValueChanges$: Observable<any> =
-    this.filterProducts.valueChanges.pipe(
+    this.filterProductsByPrice.valueChanges.pipe(
       startWith({ priceFrom: 0, priceTo: 9999 }),
       shareReplay(1)
     );
+  readonly filterByStarRatingValueChanges$: Observable<any> =
+    this.ratingByStar.valueChanges.pipe(startWith(0),shareReplay(1));
+
   private _activePageSubject: BehaviorSubject<number> =
     new BehaviorSubject<number>(1);
   public activePage$: Observable<number> =
@@ -81,9 +89,15 @@ export class CategoryProductsComponent {
     this.sortBySelect.valueChanges.pipe(startWith('featured')),
     this.pageQueryParams$,
     this.filterByPriceValueChanges$,
+    this.filterByStarRatingValueChanges$
   ]).pipe(
-    map(([products, category, sortBySelect, params, filters]) => {
+    map(([products, category, sortBySelect, params, filters, ratingStar]) => {
       return products
+        .filter((product) =>
+          ratingStar != 0
+            ? Math.trunc(product.ratingValue) == ratingStar.rating
+            : product.ratingValue > 0
+        )
         .filter((product) =>
           filters.priceFrom
             ? product.price >= filters.priceFrom

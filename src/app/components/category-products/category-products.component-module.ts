@@ -6,8 +6,10 @@ import { CategoryProductsComponent } from './category-products.component';
 import { MatSelectModule } from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatRadioModule } from '@angular/material/radio';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 @NgModule({
-  imports: [CommonModule, RouterModule, ReactiveFormsModule,MatSelectModule,MatButtonModule,MatButtonToggleModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule,MatSelectModule,MatButtonModule,MatButtonToggleModule,MatRadioModule,MatCheckboxModule],
   declarations: [CategoryProductsComponent],
   providers: [],
   exports: [CategoryProductsComponent]
