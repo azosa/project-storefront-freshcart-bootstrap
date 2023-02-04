@@ -52,12 +52,22 @@
           class="text-decoration-none text-inherit"
           ><!-- card -->
           <div class="card card-product">
-            <div class="card-body  py-8">
+            <div class="card-body  py-8 position-relative">
               <!-- img --><img
                 [src]="item.imageUrl"
                 [alt]=""
-                class="mb-3"
-              /><!-- text -->
+                class="mb-3 img-fluid"
+              />
+              <div class="card-product-action  text-center">
+                <div
+                  (click)="addToWishlist(item)"
+                  class="btn-action"
+                  aria-label="Wishlist"
+                >
+                  <i class="bi bi-heart"></i>
+                </div>
+              </div>
+              <!-- text -->
               <div class="text-truncate">{{ item.name }}</div>
               <div class="text-truncate">${{item.price }}</div>
             </div>
@@ -89,8 +99,16 @@
               <!-- img --><img
                 [src]="item.imageUrl"
                 [alt]=""
-                class="mb-3"
-              /><!-- text -->
+                class="mb-3 img-fluid"
+              />  <div class="card-product-action  text-center">
+                <div
+                  (click)="addToWishlist(item)"
+                  class="btn-action"
+                  aria-label="Wishlist"
+                >
+                  <i class="bi bi-heart"></i>
+                </div>
+              </div><!-- text -->
               <div class="text-truncate">{{ item.name }}</div>
               <div class="text-truncate">${{item.price }}</div>
             </div>
