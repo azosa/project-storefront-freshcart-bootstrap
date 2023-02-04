@@ -1,0 +1,72 @@
+<section class="mt-8 mb-14">
+    <div class="container">
+      <!-- row -->
+      <div class="row">
+<div class="col-lg-12" *ngIf="wishlistProducts$ |async as wishProds">
+<div class="mb-8">
+    <!-- heading -->
+    <h1 class="mb-1">My Wishlist</h1>
+    <p>There are {{wishProds.length}} products in this wishlist.</p>
+  </div> 
+  <div>
+    <!-- table -->
+    <div class="table-responsive">
+      <table class="table text-nowrap table-with-checkbox">
+        <thead class="table-light">
+          <tr>
+            <th>
+          
+            </th>
+            <th></th>
+            <th>Product</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of wishProds">
+
+            <td class="align-middle">
+              <!-- form check -->
+              <div class="form-check">
+                <!-- input --><input class="form-check-input" type="checkbox" value="" id="chechboxTwo">
+                <!-- label --><label class="form-check-label" for="chechboxTwo">
+
+                </label>
+              </div>
+
+            </td>
+            <td class="align-middle">
+              <a href="#"><img [src]="item.imgUrl" class="icon-shape icon-xxl" alt=""></a>
+
+            </td>
+            <td class="align-middle">
+              <div>
+                <h5 class="fs-6 mb-0"><a href="#" class="text-inherit">{{item.name}}</a></h5>
+                <small>{{item.amount}} / {{item.unit}}</small>
+              </div>
+            </td>
+            <td class="align-middle">{{item.price|currency}}</td>
+            <td class="align-middle"><span 
+               class="badge" [ngClass]="item.status === 'In Stock'? 'bg-success' : 'bg-danger' ">{{item.status}}</span></td>
+            <td class="align-middle">
+              <div (click)="addToCart(item.id)" class="btn btn-primary btn-sm">Add to Cart</div>
+            </td>
+            <td class="align-middle "><a  (click)="removeProd(item.id)" class="text-muted" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
+                <i class="feather-icon icon-trash-2"></i>
+              </a></td>
+          </tr>
+
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+</div>
+</div>
+</section>
