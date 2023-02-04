@@ -1,15 +1,16 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, combineLatest } from 'rxjs';
-import { filter, map, shareReplay } from 'rxjs/operators';
+import {  map, shareReplay } from 'rxjs/operators';
 import { CategoryModel } from '../../models/category.model';
-import { StoreWithTagNamesQueryModel } from '../../query-models/store-with-tag-names.query-model';
 import { ProductModel } from '../../models/product.model';
+import { StoreWithTagNamesQueryModel } from '../../query-models/store-with-tag-names.query-model';
 import { StoreModel } from '../../models/store.model';
 import { StoreTagModel } from '../../models/store-tag.model';
 import { CategoriesService } from '../../services/categories.service';
 import { StoresService } from '../../services/stores.service';
 import { ProductsService } from '../../services/products.service';
+import { WishlistService } from '../../services/wishlist.service';
 
 @Component({
   selector: 'app-home',
@@ -58,7 +59,7 @@ export class HomeComponent {
     );
 
   readonly snackMunchiesCategoryProducts$: Observable<ProductModel[]> =
-  this.allProducts$.pipe(
+    this.allProducts$.pipe(
       map((products) =>
         products
           .filter((product) => product.categoryId === '2')
@@ -70,7 +71,21 @@ export class HomeComponent {
           .slice(0, 5)
       )
     );
-
-  constructor(private _categoriesService: CategoriesService, private _router: Router, private _activatedRoute: ActivatedRoute, private _storesService: StoresService, private _productsService: ProductsService) {
+  addToWishlist(item: ProductModel) {
+    const el = [
+      {
+        name: item.name,
+        price: String(item.price),
+        amount: '1',
+        unit: '',
+        status: 'In Stock',
+        imgUrl: item.imageUrl,
+        id: item.id,
+      },
+    ];
+    this._wishlistService.addProdToWishlist(el);
+    this._router.navigate(['/wishlist']);
+  }
+  constructor(private _categoriesService: CategoriesService, private _router: Router, private _activatedRoute: ActivatedRoute, private _storesService: StoresService, private _productsService: ProductsService, private _wishlistService: WishlistService) {
   }
 }
