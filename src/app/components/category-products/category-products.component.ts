@@ -23,7 +23,8 @@ import { StoreModel } from '../../models/store.model';
 import { CategoriesService } from '../../services/categories.service';
 import { ProductsService } from '../../services/products.service';
 import { StoresService } from '../../services/stores.service';
-
+import { ProductModel } from 'src/app/models/product.model';
+import { WishlistService } from '../../services/wishlist.service';
 @Component({
   selector: 'app-category-products',
   styleUrls: ['./category-products.component.scss'],
@@ -124,72 +125,63 @@ export class CategoryProductsComponent {
     this.filterByStarRatingValueChanges$,
     this.filterByStoreValueChanges$,
   ]).pipe(
-    map(
-      ([
-        products,
-        category,
-        sortBySelect,
-        filters,
-        ratingStar,
-        store,
-      ]) => {
-        return products
-          .filter((product) =>
-            store?.length > 0
-              ? product.storeIds.some((sId) => store.includes(sId))
-              : product
-          )
-          .filter((product) =>
-            ratingStar != 0
-              ? Math.trunc(product.ratingValue) == ratingStar.rating
-              : product.ratingValue > 0
-          )
-          .filter((product) =>
-            filters.priceFrom
-              ? product.price >= filters.priceFrom
-              : product.price > 0
-          )
-          .filter((product) =>
-            filters.priceTo
-              ? product.price <= filters.priceTo
-              : product.price < 9999
-          )
-          .filter((product) => product.categoryId === category.id)
-          .sort((a, b) => {
-            if (
-              sortBySelect.select === 'featured' ||
-              sortBySelect == 'featured'
-            ) {
-              return a.featureValue > b.featureValue ? -1 : 1;
-            }
+    map(([products, category, sortBySelect, filters, ratingStar, store]) => {
+      return products
+        .filter((product) =>
+          store?.length > 0
+            ? product.storeIds.some((sId) => store.includes(sId))
+            : product
+        )
+        .filter((product) =>
+          ratingStar != 0
+            ? Math.trunc(product.ratingValue) == ratingStar.rating
+            : product.ratingValue > 0
+        )
+        .filter((product) =>
+          filters.priceFrom
+            ? product.price >= filters.priceFrom
+            : product.price > 0
+        )
+        .filter((product) =>
+          filters.priceTo
+            ? product.price <= filters.priceTo
+            : product.price < 9999
+        )
+        .filter((product) => product.categoryId === category.id)
+        .sort((a, b) => {
+          if (
+            sortBySelect.select === 'featured' ||
+            sortBySelect == 'featured'
+          ) {
+            return a.featureValue > b.featureValue ? -1 : 1;
+          }
 
-            if (sortBySelect.select === 'Low to High') {
-              return a.price > b.price ? 1 : -1;
-            }
+          if (sortBySelect.select === 'Low to High') {
+            return a.price > b.price ? 1 : -1;
+          }
 
-            if (sortBySelect.select === 'High to Low') {
-              return a.price > b.price ? -1 : 1;
-            }
+          if (sortBySelect.select === 'High to Low') {
+            return a.price > b.price ? -1 : 1;
+          }
 
-            if (sortBySelect.select === 'Avg. Rating') {
-              return a.ratingValue > b.ratingValue ? -1 : 1;
-            }
-            return 0;
-          })
-          .map((prod) => ({
-            name: prod.name,
-            price: prod.price,
-            categoryId: prod.categoryId,
-            ratingValue: prod.ratingValue,
-            ratingStars: this.getRating(prod.ratingValue),
-            ratingCount: prod.ratingCount,
-            imageUrl: prod.imageUrl,
-            featureValue: prod.featureValue,
-            storeIds: prod.storeIds,
-            id: prod.id,
-          }));
-      }
-    ),
+          if (sortBySelect.select === 'Avg. Rating') {
+            return a.ratingValue > b.ratingValue ? -1 : 1;
+          }
+          return 0;
+        })
+        .map((prod) => ({
+          name: prod.name,
+          price: prod.price,
+          categoryId: prod.categoryId,
+          ratingValue: prod.ratingValue,
+          ratingStars: this.getRating(prod.ratingValue),
+          ratingCount: prod.ratingCount,
+          imageUrl: prod.imageUrl,
+          featureValue: prod.featureValue,
+          storeIds: prod.storeIds,
+          id: prod.id,
+        }));
+    }),
     shareReplay(1)
   );
 
@@ -268,11 +260,27 @@ export class CategoryProductsComponent {
       )
       .subscribe();
   }
+  addToWishlist(item: ProductWithStarsQueryModel) {
+    const el = [
+      {
+        name: item.name,
+        price: String(item.price),
+        amount: '1',
+        unit: '',
+        status: 'In Stock',
+        imgUrl: item.imageUrl,
+        id: item.id,
+      },
+    ];
+    this._wishlistService.addProdToWishlist(el);
+    this._router.navigate(['/wishlist']);
+  }
   constructor(
     private _categoriesService: CategoriesService,
     private _activatedRoute: ActivatedRoute,
     private _productsService: ProductsService,
     private _router: Router,
-    private _storesService: StoresService
+    private _storesService: StoresService,
+    private _wishlistService: WishlistService
   ) {}
 }

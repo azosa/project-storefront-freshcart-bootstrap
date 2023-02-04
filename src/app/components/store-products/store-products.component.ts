@@ -6,7 +6,7 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, combineLatest } from 'rxjs';
-import { filter, map, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
+import { map, shareReplay, startWith, switchMap } from 'rxjs/operators';
 import { ProductModel } from '../../models/product.model';
 import { StoreModel } from '../../models/store.model';
 import { ProductsService } from '../../services/products.service';
