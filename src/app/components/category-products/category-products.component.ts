@@ -25,6 +25,8 @@ import { ProductsService } from '../../services/products.service';
 import { StoresService } from '../../services/stores.service';
 import { ProductModel } from 'src/app/models/product.model';
 import { WishlistService } from '../../services/wishlist.service';
+import { BasketService } from '../../services/basket.service';
+
 @Component({
   selector: 'app-category-products',
   styleUrls: ['./category-products.component.scss'],
@@ -275,12 +277,26 @@ export class CategoryProductsComponent {
     this._wishlistService.addProdToWishlist(el);
     this._router.navigate(['/wishlist']);
   }
+  addToBasket(item: ProductModel) {
+    const el = [
+      {
+        name: item.name,
+        imgUrl: item.imageUrl,
+        quantity:1,   
+        id: item.id,
+        price:item.price,
+      },
+    ];
+    this._basketService.addtoBasket(el[0]);
+    this._router.navigate(['/basket']);
+
+  }
   constructor(
     private _categoriesService: CategoriesService,
     private _activatedRoute: ActivatedRoute,
     private _productsService: ProductsService,
     private _router: Router,
     private _storesService: StoresService,
-    private _wishlistService: WishlistService
-  ) {}
+    private _wishlistService: WishlistService, private _basketService: BasketService
+  ) { }
 }
