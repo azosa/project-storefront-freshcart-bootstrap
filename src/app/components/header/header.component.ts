@@ -3,7 +3,14 @@ import {
   Component,
   ViewEncapsulation,
 } from '@angular/core';
-import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  shareReplay,
+  map,
+  tap,
+} from 'rxjs';
+import { BasketService } from 'src/app/services/basket.service';
 import { CategoryModel } from '../../models/category.model';
 import { CategoriesService } from '../../services/categories.service';
 import { WishlistService } from '../../services/wishlist.service';
@@ -23,6 +30,15 @@ export class HeaderComponent {
     }
   );
 
+  public basketProdsNum: number = 0;
+  private basketProds = this._basketService
+    .getAll()
+    .pipe(
+      map((items) => items.reduce((acc, cur) => acc + cur.quantity, 0)),
+      tap((data) => (this.basketProdsNum = data))
+    )
+    .subscribe();
+
   readonly categories$: Observable<CategoryModel[]> = this._categoriesService
     .getAllCategories()
     .pipe(shareReplay(1));
@@ -35,6 +51,7 @@ export class HeaderComponent {
   }
   constructor(
     private _categoriesService: CategoriesService,
-    private _wishlistService: WishlistService
+    private _wishlistService: WishlistService,
+    private _basketService: BasketService
   ) {}
 }
