@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, combineLatest } from 'rxjs';
-import {  map, shareReplay } from 'rxjs/operators';
+import { filter, map, shareReplay } from 'rxjs/operators';
 import { CategoryModel } from '../../models/category.model';
 import { ProductModel } from '../../models/product.model';
 import { StoreWithTagNamesQueryModel } from '../../query-models/store-with-tag-names.query-model';
@@ -11,6 +11,7 @@ import { CategoriesService } from '../../services/categories.service';
 import { StoresService } from '../../services/stores.service';
 import { ProductsService } from '../../services/products.service';
 import { WishlistService } from '../../services/wishlist.service';
+import { BasketService } from '../../services/basket.service';
 
 @Component({
   selector: 'app-home',
@@ -86,6 +87,21 @@ export class HomeComponent {
     this._wishlistService.addProdToWishlist(el);
     this._router.navigate(['/wishlist']);
   }
-  constructor(private _categoriesService: CategoriesService, private _router: Router, private _activatedRoute: ActivatedRoute, private _storesService: StoresService, private _productsService: ProductsService, private _wishlistService: WishlistService) {
+
+  addToBasket(item: ProductModel) {
+    const el = [
+      {
+        name: item.name,
+        imgUrl: item.imageUrl,
+        quantity:1,   
+        id: item.id,
+        price:item.price,
+      },
+    ];
+    this._basketService.addtoBasket(el[0]);
+    this._router.navigate(['/basket']);
+
+  }
+  constructor(private _categoriesService: CategoriesService, private _router: Router, private _activatedRoute: ActivatedRoute, private _storesService: StoresService, private _productsService: ProductsService, private _wishlistService: WishlistService, private _basketService: BasketService) {
   }
 }
