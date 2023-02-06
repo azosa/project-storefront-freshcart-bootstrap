@@ -52,7 +52,7 @@
             <td class="align-middle"><span 
                class="badge" [ngClass]="item.status === 'In Stock'? 'bg-success' : 'bg-danger' ">{{item.status}}</span></td>
             <td class="align-middle">
-              <div (click)="addToCart(item.id)" class="btn btn-primary btn-sm">Add to Cart</div>
+              <div (click)="addToCart(item)" class="btn btn-primary btn-sm">Add to Cart</div>
             </td>
             <td class="align-middle "><a  (click)="removeProd(item.id)" class="text-muted" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
                 <i class="feather-icon icon-trash-2"></i>
