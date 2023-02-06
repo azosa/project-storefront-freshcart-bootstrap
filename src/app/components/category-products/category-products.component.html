@@ -84,8 +84,10 @@
                   ><i class="bi bi-star-fill text-warning"></i
                   ><i class="bi bi-star-fill text-warning"></i
                   ><i class="bi bi-star-fill text-warning"></i
-                ></label></div>
-                <div class="form-check mb-2"> <input
+                ></label>
+              </div>
+              <div class="form-check mb-2">
+                <input
                   type="radio"
                   class="form-check-input"
                   formControlName="rating"
@@ -99,7 +101,9 @@
                   ><i class="bi bi-star-fill text-warning"></i
                   ><i class="bi bi-star text-warning"></i
                 ></label>
-               </div> <div class="form-check mb-2">  <input
+              </div>
+              <div class="form-check mb-2">
+                <input
                   type="radio"
                   class="form-check-input"
                   formControlName="rating"
@@ -113,7 +117,9 @@
                   ><i class="bi bi-star text-warning"></i
                   ><i class="bi bi-star text-warning"></i
                 ></label>
-              </div> <div class="form-check mb-2">    <input
+              </div>
+              <div class="form-check mb-2">
+                <input
                   type="radio"
                   class="form-check-input"
                   formControlName="rating"
@@ -127,7 +133,9 @@
                   ><i class="bi bi-star text-warning"></i
                   ><i class="bi bi-star text-warning"></i
                 ></label>
-              </div> <div class="form-check mb-2">     <input
+              </div>
+              <div class="form-check mb-2">
+                <input
                   type="radio"
                   class="form-check-input"
                   formControlName="rating"
@@ -186,27 +194,33 @@
                 <div class="row align-items-center">
                   <div class="col-md-4 col-12">
                     <div class="text-center position-relative">
-                      <a href="shop-single.html">
-                        <!-- img --><img
-                          [src]="item.imageUrl"
-                          alt="Grocery Ecommerce Template"
-                          class="mb-3 img-fluid"
-                      /></a>
+                      <!-- img --><img
+                        [src]="item.imageUrl"
+                        alt="Grocery Ecommerce Template"
+                        class="mb-3 img-fluid"
+                      />
+                      <div class="card-product-action">
+                        <div
+                          (click)="addToWishlist(item)"
+                          class="btn-action"
+                          aria-label="Wishlist"
+                        >
+                          <i class="bi bi-heart"></i>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-8 col-12 flex-grow-1">
                     <!-- heading -->
                     <div class="text-small mb-1">
-                      <a href="#!" class="text-decoration-none text-muted"
-                        ><small>{{ category.name }}</small></a
-                      >
+                      <div class="text-decoration-none text-muted">
+                        <small>{{ category.name }}</small>
+                      </div>
                     </div>
                     <h2 class="fs-6">
-                      <a
-                        href="shop-single.html"
-                        class="text-inherit text-decoration-none"
-                        >{{ item.name }}</a
-                      >
+                      <div class="text-inherit text-decoration-none">
+                        {{ item.name }}
+                      </div>
                     </h2>
                     <div *ngIf="item.ratingValue">
                       <!-- rating --><small class="text-warning">
@@ -228,7 +242,11 @@
                       <!-- price -->
                       <div>
                         <span class="text-dark">${{ item.price }}</span>
-                      </div>
+                      </div> <div><div (click)="addToBasket(item)" class="btn btn-primary btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus">
+                          <line x1="12" y1="5" x2="12" y2="19"></line>
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg> Add</div></div>
                     </div>
                   </div>
                 </div>

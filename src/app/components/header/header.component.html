@@ -38,10 +38,55 @@
                 <span class="icon-bar middle-bar"></span>
                 <span class="icon-bar bottom-bar"></span>
               </button>
-          
             </div>
           </div>
         </div>
+        <div class="col-md-8 col-xxl-9 text-end d-none d-lg-block">
+          <div class="list-inline">
+            <div class="list-inline-item">
+              <a href="/wishlist" class="text-muted position-relative">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="feather feather-heart"
+                >
+                  <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                  ></path>
+                </svg>
+                <span
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
+                >
+                  {{ wishlistProdsNum }}
+                  <span class="visually-hidden">unread messages</span>
+                </span>
+              </a>
+            </div>
+            <div class="list-inline-item">
+
+              <a class="text-muted position-relative " data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" href="#offcanvasExample" role="button" aria-controls="offcanvasRight">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+               {{basketProdsNum}}
+                  <span class="visually-hidden">unread messages</span>
+                </span>
+              </a>
+
+            </div>
+          </div>
+        </div>
+        
         <ul class="nav d-none d-lg-flex">
           <li *ngFor="let item of categories$ | async" class="nav-item">
             <a
@@ -57,8 +102,11 @@
 </header>
 <div class="border-bottom pb-lg-4 pb-3">
   <nav class="navbar navbar-expand-lg navbar-light navbar-default pt-0 pb-0">
-    <div class="container px-0 px-md-3" *ngIf="mobileMenu$ |async as showMenu">
-      <div class="offcanvas offcanvas-start p-4 p-lg-0" [ngClass]="{ show: showMenu }">
+    <div class="container px-0 px-md-3" *ngIf="mobileMenu$ | async as showMenu">
+      <div
+        class="offcanvas offcanvas-start p-4 p-lg-0"
+        [ngClass]="{ show: showMenu }"
+      >
         <div
           class="d-flex justify-content-between align-items-center mb-2 d-block d-lg-none"
         >
@@ -67,13 +115,25 @@
               src="/assets/images/logo/freshcart-logo.svg"
               alt="eCommerce HTML Template"
           /></a>
-          <button type="button" class="btn-close" aria-label="Close"  (click)="onClickMobileMenu(false)"></button>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="onClickMobileMenu(false)"
+          ></button>
         </div>
-        <div class="d-block">    <ul class="navbar-nav">
-          <li *ngFor="let item of categories$ | async" class="nav-item">
-            <a [routerLink]="'/categories/' + item.id" class="nav-link" (click)="onClickMobileMenu(false)">{{ item.name }}</a>
-          </li>
-        </ul></div>
+        <div class="d-block">
+          <ul class="navbar-nav">
+            <li *ngFor="let item of categories$ | async" class="nav-item">
+              <a
+                [routerLink]="'/categories/' + item.id"
+                class="nav-link"
+                (click)="onClickMobileMenu(false)"
+                >{{ item.name }}</a
+              >
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>

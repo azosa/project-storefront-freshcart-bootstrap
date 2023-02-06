@@ -1,16 +1,14 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, combineLatest } from 'rxjs';
-import { filter, map, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
-import { ProductModel } from '../../models/product.model';
+import { filter, map, shareReplay, startWith, switchMap } from 'rxjs/operators';
 import { StoreModel } from '../../models/store.model';
+import { ProductModel } from '../../models/product.model';
 import { ProductsService } from '../../services/products.service';
 import { StoresService } from '../../services/stores.service';
+import { BasketService } from '../../services/basket.service';
+import { WishlistService } from '../../services/wishlist.service';
 
 @Component({
   selector: 'app-store-products',
@@ -40,19 +38,48 @@ export class StoreProductsComponent {
     map(([products, search, store]) =>
       search.searchMarket
         ? products.filter(
-            (prod) =>
-              prod.name
-                .toLowerCase()
-                .includes(search.searchMarket.toLowerCase()) &&
-              prod.storeIds.includes(store.id)
-          )
-        : products.filter((prod)=>prod.storeIds.includes(store.id))
+          (prod) =>
+            prod.name
+              .toLowerCase()
+              .includes(search.searchMarket.toLowerCase()) &&
+            prod.storeIds.includes(store.id)
+        )
+        : products.filter((prod) => prod.storeIds.includes(store.id))
     )
   );
+  addToWishlist(item: ProductModel) {
+    const el = [
+      {
+        name: item.name,
+        price: String(item.price),
+        amount: '1',
+        unit: '',
+        status: 'In Stock',
+        imgUrl: item.imageUrl,
+        id: item.id,
+      },
+    ];
+    this._wishlistService.addProdToWishlist(el);
+    this._router.navigate(['/wishlist']);
+  }
+  addToBasket(item: ProductModel) {
+    const el = [
+      {
+        name: item.name,
+        imgUrl: item.imageUrl,
+        quantity:1,   
+        id: item.id,
+        price:item.price,
+      },
+    ];
+    this._basketService.addtoBasket(el[0]);
+    this._router.navigate(['/basket']);
+
+  }
 
   constructor(
     private _productsService: ProductsService,
     private _activatedRoute: ActivatedRoute,
-    private _storesService: StoresService
-  ) {}
+    private _storesService: StoresService, private _basketService: BasketService, private _router: Router, private _wishlistService: WishlistService
+  ) { }
 }
